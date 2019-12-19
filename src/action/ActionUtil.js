@@ -23,7 +23,6 @@ export function handleData(actionType, dispatch, storeName, data, pageSize, favo
     }
     let showItems = pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize);//第一次要加载的数据
     _projectModels(showItems, favoriteDao, projectModels => {
-        console.log('[handleData]', projectModels);
         dispatch({
             type: actionType,
             items: fixItems,
@@ -47,7 +46,6 @@ export async function _projectModels(showItems, favoriteDao, callback) {
     try {
         //获取收藏的keys
         keys = await favoriteDao.getFavoriteKeys();  //async await 异步转同步
-        console.log('[keys]', keys);
     } catch (e) {
         console.log(e);
     }

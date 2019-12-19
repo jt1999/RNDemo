@@ -66,3 +66,29 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
         }, 500);
     };
 }
+
+/**
+ * 刷新收藏状态
+ * @param storeName
+ * @param pageIndex 第几页
+ * @param pageSize  每页展示条数
+ * @param dataArray  原始数据
+ * @param favoriteDao
+ * @returns {Function}
+ */
+export function onFlushPopularFavorite(storeName, pageIndex, pageSize, dataArray = [], favoriteDao) {
+    return dispatch => {
+        //本次和载入的最大数量
+        let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageIndex * pageSize;
+        _projectModels(dataArray.slice(0, max), favoriteDao, data => {
+            dispatch({
+                type: Types.POPULAR_FLUSH_FAVORITE,
+                storeName,
+                pageIndex,
+                projectModels: data,
+            });
+            console.log('[onFlushPopularFavorite]',data)
+        });
+
+    };
+}

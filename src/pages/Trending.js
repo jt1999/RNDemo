@@ -22,6 +22,8 @@ import FavoriteDao from '../expand/dao/FavoriteDao';
 import {FLAG_STORAGE} from '../expand/dao/DataStore';
 import FavoriteUtil from '../util/FavoriteUtil';
 import PopularItem from '../common/PopularItem';
+import EventBus from 'react-native-event-bus';
+import EventTypes from '../util/EventTypes';
 
 //常量
 const URL = 'https://github.com/trending/';
@@ -139,6 +141,7 @@ class TrendingTab extends Component {
         const {tabLabel, timeSpan} = this.props;
         this.storeName = tabLabel;
         this.timeSpan = timeSpan;
+        this.isFavoriteChanged = false;
     }
 
     componentDidMount() {
@@ -147,26 +150,37 @@ class TrendingTab extends Component {
             this.timeSpan = timeSpan;
             this.loadData();
         });
+
+        EventBus.getInstance().addListener(EventTypes.favorite_changed_trending, this.favoriteChangedListener = () => {
+            this.isFavoriteChanged = true;
+        });
+        EventBus.getInstance().addListener(EventTypes.bottom_tab_select, this.bottomTabSelectListener = (data) => {
+            if (data.to === 1 && this.isFavoriteChanged) {
+                this.loadData(null, true);
+            }
+        });
     }
 
     componentWillUnmount() {
         if (this.timeSpanChangeListener) {
             this.timeSpanChangeListener.remove();
         }
+        EventBus.getInstance().removeListener(this.favoriteChangedListener);
+        EventBus.getInstance().removeListener(this.bottomTabSelectListener);
     }
 
-    loadData(loadMore) {
-        const {onRefreshTrending, onLoadMoreTrending} = this.props;
+    loadData(loadMore, refreshFavorite) {
+        const {onRefreshTrending, onLoadMoreTrending, onFlushTreeningFavorite} = this.props;
         const store = this._store();
         const url = this.getFetchUrl(this.storeName);
         if (loadMore) {
             onLoadMoreTrending(this.storeName, ++store.pageIndex, pageSize, store.items, favoriteDao, callBack => {
                 console.log('没有更多了');
             });
+        } else if (refreshFavorite) {
+            onFlushTreeningFavorite(this.storeName, store.pageIndex, pageSize, store.items, favoriteDao);
+            this.isFavoriteChanged = false;
         } else {
-            // if (this.storeName === 'All') {
-            //     this.storeName = '';
-            // }
             onRefreshTrending(this.storeName, url, pageSize, favoriteDao);
         }
     }
@@ -278,6 +292,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onRefreshTrending: (storeName, url, pageSize, favoriteDao) => dispatch(actions.onRefreshTrending(storeName, url, pageSize, favoriteDao)),
     onLoadMoreTrending: (storeName, pageIndex, pageSize, items, favoriteDao, callBack) => dispatch(actions.onLoadMoreTrending(storeName, pageIndex, pageSize, items, favoriteDao, callBack)),
+    onFlushTreeningFavorite: (storeName, pageIndex, pageSize, items, favoriteDao) => dispatch(actions.onFlushTreeningFavorite(storeName, pageIndex, pageSize, items, favoriteDao)),
 });
 
 const TrendingTabPage = connect(mapStateToProps, mapDispatchToProps)(TrendingTab);

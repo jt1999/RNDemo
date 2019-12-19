@@ -47,6 +47,7 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
                     error: '我是有底线的！',
                     storeName: storeName,
                     pageIndex: --pageIndex, //因为pageIndex是请求第几页的数据，如果没有这第几页的数据就pageindex-1
+                    projectModels: dataArray,
                 });
             } else {
                 //本次和载入的最大数量
@@ -62,5 +63,30 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
 
             }
         }, 500);
+    };
+}
+
+
+/**
+ * 刷新收藏状态
+ * @param storeName
+ * @param pageIndex 第几页
+ * @param pageSize  每页展示条数
+ * @param dataArray  原始数据
+ * @param favoriteDao
+ * @returns {Function}
+ */
+export function onFlushTreeningFavorite(storeName, pageIndex, pageSize, dataArray = [], favoriteDao) {
+    return dispatch => {
+        //本次和载入的最大数量
+        let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageIndex * pageSize;
+        _projectModels(dataArray.slice(0, max), favoriteDao, data => {
+            dispatch({
+                type: Types.TRENDING_FLUSH_FAVORITE,
+                storeName,
+                pageIndex,
+                projectModels: data,
+            });
+        });
     };
 }

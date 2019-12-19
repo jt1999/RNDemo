@@ -1,6 +1,4 @@
 import Types from '../types';
-import DataStore, {FLAG_STORAGE} from '../../expand/dao/DataStore';
-import {_projectModels, handleData} from '../ActionUtil';
 import FavoriteDao from '../../expand/dao/FavoriteDao';
 import ProjectModel from '../../model/ProjectModel';
 
@@ -13,7 +11,9 @@ import ProjectModel from '../../model/ProjectModel';
  */
 export function onLoadFavoriteData(flag, isShowLoading) {
     return dispatch => {
-        dispatch({type: Types.FAVORITE_LOAD_DATA, storeName: flag});
+       if(isShowLoading){
+           dispatch({type: Types.FAVORITE_LOAD_DATA, storeName: flag});
+       }
         new FavoriteDao(flag).getAllItems()
             .then(items => {
                 let resultData = [];
@@ -36,4 +36,6 @@ export function onLoadFavoriteData(flag, isShowLoading) {
             });
     };
 }
+
+
 

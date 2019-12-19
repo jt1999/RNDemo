@@ -9,6 +9,8 @@ import My from '../pages/My';
 import {createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator, BottomTabBar} from 'react-navigation-tabs';
 import {connect} from 'react-redux';
+import EventBus from 'react-native-event-bus';
+import EventTypes from '../util/EventTypes';
 
 const TABS = {
     Popular: {
@@ -90,7 +92,15 @@ class DynamicTabNavigator extends Component {
 
     render() {
         const Tab = this._tabNavigator();
-        return <Tab/>;
+        return <Tab
+            onNavigationStateChange={(prevState, newState, action) => {
+                //prevState:切换之前的状态,newState：切换之后的状态
+                EventBus.getInstance().fireEvent(EventTypes.bottom_tab_select, {
+                    from: prevState.index, //tabIndex
+                    to: newState.index,
+                });
+            }}
+        />;
     }
 
 }
