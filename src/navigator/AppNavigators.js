@@ -8,60 +8,67 @@ import AsyncStorageDemo from '../pages/AsyncStorageDemo';
 import DataStoreDemo from '../pages/DataStoreDemo';
 import {connect} from 'react-redux';
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers';
+import WebViewPage from '../pages/WebViewPage';
 
 export const rootCom = 'InitNavigator';//设置根路由，对应RootNavigator中第一个初始化的路由名
 
 const InitNavigator = createStackNavigator(
-    {
-        Welcome: {
-            screen: Welcome,
-            navigationOptions: {header: null},
-        },
+  {
+    Welcome: {
+      screen: Welcome,
+      navigationOptions: {header: null},
     },
+  },
 );
 
 const MainNavigator = createStackNavigator(
-    {
-        Home: {
-            screen: Home,
-            navigationOptions: {header: null},
-        },
-        Detail: {
-            screen: Detail,
-            navigationOptions: {header: null},
-        },
-        AsyncStorageDemo: {
-            screen: AsyncStorageDemo,
-            navigationOptions: {
-                title: '缓存案例',
-            },
-        },
-        DataStoreDemo: {
-            screen: DataStoreDemo,
-            navigationOptions: {
-                title: '离线缓存案例',
-            },
-        },
+  {
+    Home: {
+      screen: Home,
+      navigationOptions: {header: null},
     },
+    Detail: {
+      screen: Detail,
+      navigationOptions: {header: null},
+    },
+    AsyncStorageDemo: {
+      screen: AsyncStorageDemo,
+      navigationOptions: {
+        title: '缓存案例',
+      },
+    },
+    DataStoreDemo: {
+      screen: DataStoreDemo,
+      navigationOptions: {
+        title: '离线缓存案例',
+      },
+    },
+    WebViewPage: {
+      screen: WebViewPage,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
 );
 
 export default createAppContainer(createSwitchNavigator({
-    InitNavigator,
-    MainNavigator,
+  InitNavigator,
+  MainNavigator,
 }, {
-    navigationOptions: {
-        header: null,
-    },
+  navigationOptions: {
+    header: null,
+  },
 }));
 
 
 export const RootNavigator = createAppContainer(createSwitchNavigator({
-    [rootCom]: InitNavigator,
-    Main: MainNavigator,
+  [rootCom]: InitNavigator,
+  Main: MainNavigator,
 }, {
-    navigationOptions: {
-        header: null,// 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
-    },
+  navigationOptions: {
+    header: null,// 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+  },
 }));
 
 /**
@@ -72,8 +79,8 @@ export const RootNavigator = createAppContainer(createSwitchNavigator({
  * @type {Middleware}
  */
 export const middleware = createReactNavigationReduxMiddleware(
-    state => state.nav,
-    'root',
+  state => state.nav,
+  'root',
 );
 
 /**
@@ -91,7 +98,7 @@ const AppWithNavigationState = createReduxContainer(RootNavigator, 'root');
  * @param state
  */
 const mapStateToProps = state => ({
-    state: state.nav,//v2
+  state: state.nav,//v2
 });
 /**
  * 3.连接 React 组件与 Redux store
