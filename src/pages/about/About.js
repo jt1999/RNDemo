@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Linking} from 'react-native';
 import NavigatorUtil from '../../navigator/NavigatorUtil';
 import {MORE_MENU} from '../../common/MORE_MENU';
 import ViewUtil from '../../util/ViewUtil';
@@ -30,6 +30,20 @@ export default class My extends Component {
         RouteName = 'WebViewPage';
         params.title = '教程';
         params.url = 'https://coding.m.imooc.com/classindex.html?cid=304';
+      case MORE_MENU.Feedback:
+        const url = '';
+        Linking.canOpenURL(url)
+          .then(support => {
+            if (!support) {
+              //不支持
+              console.log('暂不支持此功能！');
+            } else {
+              Linking.openURL(url);
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
         break;
     }
     if (RouteName) {
