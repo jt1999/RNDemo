@@ -33,6 +33,9 @@ class My extends Component {
         params.title = '教程';
         params.url = 'https://coding.m.imooc.com/classindex.html?cid=304';
         break;
+      case MORE_MENU.About:
+        RouteName = 'About';
+        break;
     }
     if (RouteName) {
       NavigatorUtil.goPage(params, RouteName);

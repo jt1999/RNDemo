@@ -9,6 +9,7 @@ import DataStoreDemo from '../pages/DataStoreDemo';
 import {connect} from 'react-redux';
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers';
 import WebViewPage from '../pages/WebViewPage';
+import About from '../pages/about/About';
 
 export const rootCom = 'InitNavigator';//设置根路由，对应RootNavigator中第一个初始化的路由名
 
@@ -48,6 +49,10 @@ const MainNavigator = createStackNavigator(
       navigationOptions: {
         header: null,
       },
+    },
+    About: {
+      screen: About,
+      navigationOptions: {header: null},
     },
   },
 );
