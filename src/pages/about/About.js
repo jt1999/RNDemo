@@ -9,7 +9,7 @@ import GlobalStyles from '../../res/style/GlobalStyles';
 
 const THEME_COLOR = '#678';
 
-export default class My extends Component {
+export default class About extends Component {
   constructor(props) {
     super(props);
     this.params = this.props.navigation.state.params;
@@ -30,8 +30,12 @@ export default class My extends Component {
         RouteName = 'WebViewPage';
         params.title = '教程';
         params.url = 'https://coding.m.imooc.com/classindex.html?cid=304';
+        break;
+      case MORE_MENU.About_Author:
+        RouteName = 'AboutAuthor';
+        break;
       case MORE_MENU.Feedback:
-        const url = '';
+        const url = 'mailto://crazycodeboy@gmail.com';
         Linking.canOpenURL(url)
           .then(support => {
             if (!support) {
@@ -49,6 +53,14 @@ export default class My extends Component {
     if (RouteName) {
       NavigatorUtil.goPage(params, RouteName);
     }
+  }
+
+  componentDidMount() {
+    this.aboutCommon.componentDidMount();
+  }
+
+  componentWillUnmount() {
+    this.aboutCommon.componentWillUnmount();
   }
 
   getItem(menu) {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Linking} from 'react-native';
 import {connect} from 'react-redux';
 import actions from '../action';
 import NavigationBar from '../common/NavigationBar';
@@ -35,6 +35,24 @@ class My extends Component {
         break;
       case MORE_MENU.About:
         RouteName = 'About';
+        break;
+      case MORE_MENU.About_Author:
+        RouteName = 'AboutAuthor';
+        break;
+      case MORE_MENU.Feedback:
+        const url = 'mailto://crazycodeboy@gmail.com';
+        Linking.canOpenURL(url)
+          .then(support => {
+            if (!support) {
+              //不支持
+              console.log('暂不支持此功能！');
+            } else {
+              Linking.openURL(url);
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
         break;
     }
     if (RouteName) {
@@ -115,7 +133,6 @@ class My extends Component {
           {this.getItem(MORE_MENU.Custom_Theme)}
           <View style={GlobalStyles.line}/>
           {/*关于作者*/}
-          <View style={GlobalStyles.line}/>
           {this.getItem(MORE_MENU.About_Author)}
           <View style={GlobalStyles.line}/>
           {/*反馈*/}

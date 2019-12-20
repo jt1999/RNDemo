@@ -118,23 +118,22 @@ export default class AboutCommon {
    * 第二种方法：网络加载config
    */
   getConfig() {
-    fetch('https://www.devio.org/io/GitHubPopular/json/github_app_config.json')
-      .then(response => {
-        if (response.ok) {
-          return response.json;
-        }
-        throw new Error('网络出错！');
-      })
-      .then(config => {
-        if (config) {
-          this.updateState({
-            data: config,
-          });
-        }
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    fetch('https://www.devio.org/io/GitHubPopular/json/github_app_config.json').then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('网络出错！');
+    }).then((config) => {
+      if (config) {
+        console.log('【fetchConfig】', config);
+        this.updateState({
+          data: config,
+        });
+        console.log('【updateState】', this.updateState.data);
+      }
+    }).catch(e => {
+      console.log(e);
+    });
   }
 
 }
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
   stickySection: {
     height: STICKY_HEADER_HEIGHT,
     alignItems: 'center',
-    paddingTop:TOP
+    paddingTop: TOP,
   },
   stickySectionText: {
     color: 'white',
@@ -171,11 +170,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop:TOP
+    paddingTop: TOP,
   },
   fixedSectionText: {
     color: '#999',
-    fontSize: 20
+    fontSize: 20,
   },
   parallaxHeader: {
     alignItems: 'center',
@@ -191,12 +190,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24,
     paddingVertical: 5,
-    marginBottom: 10
+    marginBottom: 10,
   },
   sectionTitleText: {
     color: 'white',
     fontSize: 16,
     marginRight: 10,
-    marginLeft: 10
-  }
+    marginLeft: 10,
+  },
 });
