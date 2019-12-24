@@ -61,6 +61,7 @@ class Popular extends Component {
           indicatorStyle: styles.indicatorStyle,
           labelStyle: styles.labelStyle,
         },
+        lazy: true, //懒加载，一次只加载一个tab的数据
       },
     ));
   }

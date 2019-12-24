@@ -11,6 +11,7 @@ import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-
 import WebViewPage from '../pages/WebViewPage';
 import About from '../pages/about/About';
 import AboutAuthor from '../pages/about/AboutAuthor';
+import CustomKey from '../pages/CustomKey';
 
 export const rootCom = 'InitNavigator';//设置根路由，对应RootNavigator中第一个初始化的路由名
 
@@ -57,6 +58,12 @@ const MainNavigator = createStackNavigator(
     },
     AboutAuthor: {
       screen: AboutAuthor,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    CustomKey: {
+      screen: CustomKey,
       navigationOptions: {
         header: null,
       },
