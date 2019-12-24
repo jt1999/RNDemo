@@ -119,5 +119,26 @@ export default class Common {
   static toast(message, options = {position: Toast.positions.BOTTOM}) {
     Toast.show(message, options);
   }
+
+  /**
+   * 判断两个数组的是否相等
+   * @param arr1
+   * @param arr2
+   * @returns {boolean} true 数组长度相等并且元素相等
+   */
+  static isEqual(arr1, arr2) {
+    if (!(arr1 && arr2)) {
+      return false;
+    }
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    for (let i = 0, len = arr1.length; i < len; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    return true
+  }
 }
 
