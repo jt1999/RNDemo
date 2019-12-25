@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import NavigatorUtil from '../navigator/NavigatorUtil';
+import actions from '../action';
+import {connect} from 'react-redux';
 
-export default class Welcome extends Component {
+class Welcome extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,6 +13,7 @@ export default class Welcome extends Component {
     }
 
     componentDidMount() {
+        this.props.onThemeInit();
         const that = this;
         this.timer = setInterval(() => {
             let time = that.state.time;
@@ -43,6 +46,12 @@ export default class Welcome extends Component {
         );
     }
 }
+
+const mapDispatchToProps = dispatch => ({
+    onThemeInit: () => dispatch(actions.onThemeInit()),
+});
+
+export default connect(null,mapDispatchToProps)(Welcome)
 
 const styles = StyleSheet.create({
     container: {
