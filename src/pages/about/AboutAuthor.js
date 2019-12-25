@@ -8,7 +8,6 @@ import GlobalStyles from '../../res/style/GlobalStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Common from '../../common';
 
-const THEME_COLOR = '#678';
 
 export default class AboutAuthor extends Component {
   constructor(props) {
@@ -37,12 +36,14 @@ export default class AboutAuthor extends Component {
   }
 
   onClick(data) {
+    const {theme}=this.params;
     if (!data) {
       return;
     }
     //网页
     if (data.url) {
       NavigatorUtil.goPage({
+        theme,
         title: data.title,
         url: data.url,
       }, 'WebViewPage');
@@ -68,15 +69,17 @@ export default class AboutAuthor extends Component {
   }
 
   getItem(menu) {
-    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+    const {theme}=this.params;
+    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, theme.themeColor);
   }
 
   _item(menu, isShow, key) {
+    const {theme}=this.params;
     return ViewUtil.getSettingItem(() => {
       this.setState({
         [key]: !this.state[key],
       });
-    }, menu.name, THEME_COLOR, Ionicons, menu.icon, isShow ? 'ios-arrow-up' : 'ios-arrow-down');
+    }, menu.name, theme.themeColor, Ionicons, menu.icon, isShow ? 'ios-arrow-up' : 'ios-arrow-down');
   }
 
   /**
@@ -85,6 +88,7 @@ export default class AboutAuthor extends Component {
    * @param isShowAccount
    */
   renderItems(dic, isShowAccount) {
+    const {theme}=this.params;
     if (!dic) {
       return null;
     }
@@ -93,7 +97,7 @@ export default class AboutAuthor extends Component {
       let title = isShowAccount ? dic[i].title + ':' + dic[i].account : dic[i].title;
       views.push(
         <View key={i}>
-          {ViewUtil.getSettingItem(() => this.onClick(dic[i]), title, THEME_COLOR)}
+          {ViewUtil.getSettingItem(() => this.onClick(dic[i]), title, theme.themeColor)}
           <View style={GlobalStyles.line}/>
         </View>,
       );

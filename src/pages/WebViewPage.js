@@ -6,8 +6,6 @@ import ViewUtil from '../util/ViewUtil';
 import NavigatorUtil from '../navigator/NavigatorUtil';
 import BackPressComponent from '../common/BackPressComponent';
 
-const THEME_COLOR = '#678';
-
 class WebViewPage extends Component {
   constructor(props) {
     super(props);
@@ -51,10 +49,11 @@ class WebViewPage extends Component {
   }
 
   render() {
+    const {theme} = this.params;
     let navigationBar = <NavigationBar
       leftButton={ViewUtil.getLeftBackButton(() => this.onBack())}
       title={this.state.title}
-      style={{backgroundColor: THEME_COLOR}}
+      style={theme.styles.navBar}
     />;
     return (
       <SafeAreaView style={styles.container}>

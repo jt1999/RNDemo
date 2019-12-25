@@ -21,7 +21,6 @@ import NavigatorUtil from '../navigator/NavigatorUtil';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import {FLAG_STORAGE} from '../expand/dao/DataStore';
 import FavoriteUtil from '../util/FavoriteUtil';
-import PopularItem from '../common/PopularItem';
 import EventBus from 'react-native-event-bus';
 import EventTypes from '../util/EventTypes';
 import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
@@ -29,7 +28,6 @@ import Common from '../common';
 
 //常量
 const URL = 'https://github.com/trending/';
-const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
 const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE';
 
@@ -48,12 +46,13 @@ class Trending extends Component {
 
   _genTabs() {
     const tabs = {};
-    const {keys} = this.props;
+    const {keys, theme} = this.props;
     this.preKeys = keys;
     keys.forEach((item, index) => {
       if (item.checked) {
         tabs[`tab${index}`] = {
-          screen: props => <TrendingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item.name}/>,
+          screen: props => <TrendingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item.name}
+                                            theme={theme}/>,
           navigationOptions: {
             title: item.name,
           },
@@ -65,7 +64,9 @@ class Trending extends Component {
 
   /**动态tab*/
   _createDynamicTopTab() {
-    if (!this.tabNav || !Common.isEqual(this.preKeys, this.props.keys)) {
+    const {theme} = this.props;
+    if (theme !== this.theme || !this.tabNav || !Common.isEqual(this.preKeys, this.props.keys)) {
+      this.theme=theme;
       this.tabNav = createAppContainer(createMaterialTopTabNavigator(
         this._genTabs(),
         {
@@ -74,7 +75,7 @@ class Trending extends Component {
             upperCaseLabel: false,
             scrollEnabled: true,
             style: {
-              backgroundColor: THEME_COLOR,
+              backgroundColor: theme.themeColor,
             },
             indicatorStyle: styles.indicatorStyle,
             labelStyle: styles.labelStyle,
@@ -124,15 +125,15 @@ class Trending extends Component {
   }
 
   render() {
-    const {keys} = this.props;
+    const {keys, theme} = this.props;
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     };
     let navigationBar = <NavigationBar
       titleView={this._renderTitleView()}
       statusBar={statusBar}
-      style={{backgroundColor: THEME_COLOR}}
+      style={theme.styles.navBar}
     />;
     const TopTab = keys.length ? this._createDynamicTopTab() : null;
     return <View style={{flex: 1}}>
@@ -145,6 +146,7 @@ class Trending extends Component {
 
 const mapTrendingStateToProps = state => ({
   keys: state.language.languages,
+  theme: state.theme.theme,
 });
 const mapTrendingDispatchToProps = dispatch => ({
   onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),
@@ -233,10 +235,13 @@ class TrendingTab extends Component {
 
   renderItem(data) {
     const item = data.item;
+    const {theme} = this.props;
     return <TrendingItem
       projectModel={item}
+      theme={theme}
       onSelect={(callback) => {
         NavigatorUtil.goPage({
+          theme,
           projectModel: item,
           flag: FLAG_STORAGE.flag_trending,
           callback,
@@ -248,10 +253,12 @@ class TrendingTab extends Component {
 
 
   renderListFooter() {
+    const {theme} = this.props;
     return this._store().hideLoadingMode ? null :
       <View style={styles.indicatorContainer}>
         <ActivityIndicator
-          style={styles.indicator}
+          color={theme.themeColor}
+          style={{marginTop: 10}}
         />
         <Text>正在加载更多</Text>
       </View>;
@@ -267,6 +274,7 @@ class TrendingTab extends Component {
     //     };
     // }
     let store = this._store();
+    const {theme} = this.props;
     return (
       <View style={{flex: 1}}>
         <FlatList
@@ -276,9 +284,9 @@ class TrendingTab extends Component {
           refreshControl={
             <RefreshControl
               title={'Loading'}
-              titleColor={THEME_COLOR}
-              tintColor={THEME_COLOR}
-              colors={[THEME_COLOR]}
+              titleColor={theme.themeColor}
+              tintColor={theme.themeColor}
+              colors={[theme.themeColor]}
               refreshing={store.isLoading}
               onRefresh={() => this.loadData()}
             />

@@ -7,8 +7,6 @@ import AboutCommon, {FLAG_ABOUT} from './AboutCommon';
 import config from '../../res/data/config';
 import GlobalStyles from '../../res/style/GlobalStyles';
 
-const THEME_COLOR = '#678';
-
 export default class About extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +22,8 @@ export default class About extends Component {
   }
 
   onClick(menu) {
-    let RouteName, params = {};
+    const {theme}=this.params;
+    let RouteName, params = {theme};
     switch (menu) {
       case MORE_MENU.Tutorial:
         RouteName = 'WebViewPage';
@@ -64,7 +63,8 @@ export default class About extends Component {
   }
 
   getItem(menu) {
-    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+    const {theme}=this.params;
+    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, theme.themeColor);
   }
 
   render() {

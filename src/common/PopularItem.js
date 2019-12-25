@@ -3,7 +3,6 @@ import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import BaseItem from './BaseItem';
 
-const THEME_COLOR = '#678';
 
 class PopularItem extends BaseItem {
     render() {
@@ -36,21 +35,21 @@ class PopularItem extends BaseItem {
         );
     }
 
-    _favoriteItem() {
-        return (
-            <TouchableOpacity
-                style={{padding: 6}}
-                underlayColor='transparent'
-                onPress={() => {
-                }}>
-                <FontAwesome
-                    name={'star-o'}
-                    size={26}
-                    style={{color: THEME_COLOR}}
-                />
-            </TouchableOpacity>
-        );
-    }
+    // _favoriteItem() {
+    //     return (
+    //         <TouchableOpacity
+    //             style={{padding: 6}}
+    //             underlayColor='transparent'
+    //             onPress={() => {
+    //             }}>
+    //             <FontAwesome
+    //                 name={'star-o'}
+    //                 size={26}
+    //                 style={{color: THEME_COLOR}}
+    //             />
+    //         </TouchableOpacity>
+    //     );
+    // }
 }
 
 const styles = StyleSheet.create({

@@ -116,6 +116,7 @@ class CustomKey extends Component {
   }
 
   onBack() {
+    console.log('进来了')
     if (this.changeValues.length > 0) {
       Alert.alert(
         '系统提示',
@@ -135,6 +136,7 @@ class CustomKey extends Component {
         {cancelable: false},
       );
     } else {
+      console.log('进来了else')
       NavigatorUtil.goBack(this.props.navigation);
     }
 
@@ -178,11 +180,12 @@ class CustomKey extends Component {
    * @private
    */
   _checkedImage(checked) {
+    const {theme}=this.params;
     return <Ionicons
       name={checked ? 'ios-checkbox' : 'md-square-outline'}
       size={20}
       style={{
-        color: THEME_COLOR,
+        color: theme.themeColor,
       }}/>;
   }
 
@@ -212,7 +215,7 @@ class CustomKey extends Component {
     let views = [];
     for (let i = 0, l = len; i < l; i += 2) {
       views.push(
-        <View keys={i}>
+        <View key={i}>
           <View style={styles.item}>
             {this.renderCheckbox(dataArray[i], i)}
             {/*渲染第二个元素的时候判断数组没有越界也不是最后的元素 就渲染*/}
@@ -226,6 +229,7 @@ class CustomKey extends Component {
   }
 
   render() {
+    const {theme}=this.params;
     let title = this.isRemoveKey ? '标签移除' : '自定义标签';
     title = this.params.flag === FLAG_LANGUAGE.flag_language ? '自定义语言' : title;
     let rightButtonTitle = this.isRemoveKey ? '移除' : '保存';
@@ -233,7 +237,7 @@ class CustomKey extends Component {
       title={title}
       leftButton={ViewUtil.getLeftBackButton(() => this.onBack())}
       rightButton={ViewUtil.getRightButton(rightButtonTitle, () => this.onSave())}
-      style={{backgroundColor: THEME_COLOR}}
+      style={theme.styles.navBar}
     />;
 
     return <SafeAreaView style={styles.container}>

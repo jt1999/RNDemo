@@ -7,7 +7,6 @@ import GlobalStyles from '../../res/style/GlobalStyles';
 import ViewUtil from '../../util/ViewUtil';
 // import config from '../../res/data/config'; //导入本地文件 json导成对象
 
-const THEME_COLOR = '#678';
 const window = Dimensions.get('window');
 const AVATAR_SIZE = 90;
 const PARALLAX_HEADER_HEIGHT = 270;
@@ -94,10 +93,11 @@ export default class AboutCommon {
   }
 
   render(contentView, params) {
+    const {theme}=this.props;
     const renderConfig = this.getParallaxRenderConfig(params);
     return (
       <ParallaxScrollView
-        backgroundColor={THEME_COLOR}
+        backgroundColor={theme.themeColor}
         contentBackgroundColor={GlobalStyles.backgroundColor}  //内容背景色
         parallaxHeaderHeight={PARALLAX_HEADER_HEIGHT}
         stickyHeaderHeight={STICKY_HEADER_HEIGHT}  //顶部悬浮的高度

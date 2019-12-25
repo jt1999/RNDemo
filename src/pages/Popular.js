@@ -12,13 +12,11 @@ import {FLAG_STORAGE} from '../expand/dao/DataStore';
 import FavoriteUtil from '../util/FavoriteUtil';
 import EventBus from 'react-native-event-bus';
 import EventTypes from '../util/EventTypes';
-import {onFlushPopularFavorite} from '../action/popular';
 import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 
 //常量
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
-const THEME_COLOR = '#678';
 
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 
@@ -31,12 +29,12 @@ class Popular extends Component {
 
   _genTabs() {
     const tabs = {};
-    const {keys} = this.props;
+    const {keys, theme} = this.props;
     keys.forEach((item, index) => {
       //只展示选中的
       if (item.checked) {
         tabs[`tab${index}`] = {
-          screen: props => <PopularTabPage {...props} tabLabel={item.name}/>,
+          screen: props => <PopularTabPage {...props} theme={theme} tabLabel={item.name}/>,
           navigationOptions: {
             title: item.name,
           },
@@ -48,6 +46,7 @@ class Popular extends Component {
 
   /**动态tab*/
   _createDynamicTopTab() {
+    const {theme} = this.props;
     return createAppContainer(createMaterialTopTabNavigator(
       this._genTabs(),
       {
@@ -56,7 +55,7 @@ class Popular extends Component {
           upperCaseLabel: false,
           scrollEnabled: true,
           style: {
-            backgroundColor: THEME_COLOR,
+            backgroundColor: theme.themeColor,
           },
           indicatorStyle: styles.indicatorStyle,
           labelStyle: styles.labelStyle,
@@ -67,15 +66,15 @@ class Popular extends Component {
   }
 
   render() {
-    const {keys} = this.props;
+    const {keys, theme} = this.props;
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     };
     let navigationBar = <NavigationBar
       title={'最热'}
       statusBar={statusBar}
-      style={{backgroundColor: THEME_COLOR}}
+      style={theme.styles.navBar}
     />;
     const TopTab = keys.length ? this._createDynamicTopTab() : null;
     return <View style={{flex: 1}}>
@@ -87,6 +86,7 @@ class Popular extends Component {
 
 const mapPopularStateToProps = state => ({
   keys: state.language.keys,
+  theme: state.theme.theme,
 });
 const mapPopularDispatchToProps = dispatch => ({
   onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),
@@ -166,10 +166,13 @@ class PopularTab extends Component {
 
   renderItem(data) {
     const item = data.item;
+    const {theme}=this.props;
     return <PopularItem
       projectModel={item}
+      theme={theme}
       onSelect={(callback) => {
         NavigatorUtil.goPage({
+          theme,
           projectModel: item,
           flag: FLAG_STORAGE.flag_popular,
           callback,
@@ -181,10 +184,11 @@ class PopularTab extends Component {
 
 
   renderListFooter() {
+    const {theme} =this.props;
     return this._store().hideLoadingMode ? null :
       <View style={styles.indicatorContainer}>
         <ActivityIndicator
-          style={styles.indicator}
+          color={theme.themeColor}
         />
         <Text>正在加载更多</Text>
       </View>;
@@ -200,6 +204,7 @@ class PopularTab extends Component {
     //     };
     // }
     let store = this._store();
+    const {theme}=this.props;
     return (
       <View style={{flex: 1}}>
         <FlatList
@@ -209,9 +214,9 @@ class PopularTab extends Component {
           refreshControl={
             <RefreshControl
               title={'Loading'}
-              titleColor={THEME_COLOR}
-              tintColor={THEME_COLOR}
-              colors={[THEME_COLOR]}
+              titleColor={theme.themeColor}
+              tintColor={theme.themeColor}
+              colors={[theme.themeColor]}
               refreshing={store.isLoading}
               onRefresh={() => this.loadData()}
             />
@@ -283,7 +288,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   indicator: {
-    color: THEME_COLOR,
+    color: 'red',
     margin: 10,
   },
 });

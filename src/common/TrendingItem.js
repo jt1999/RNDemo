@@ -4,8 +4,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HtmlView from 'react-native-htmlview';
 import BaseItem from './BaseItem';
 
-const THEME_COLOR = '#678';
-
 class TrendingItem extends BaseItem {
     render() {
         const {projectModel} = this.props;
@@ -53,21 +51,21 @@ class TrendingItem extends BaseItem {
         );
     }
 
-    _favoriteItem() {
-        return (
-            <TouchableOpacity
-                style={{padding: 6}}
-                underlayColor='transparent'
-                onPress={() => {
-                }}>
-                <FontAwesome
-                    name={'star-o'}
-                    size={26}
-                    style={{color: THEME_COLOR}}
-                />
-            </TouchableOpacity>
-        );
-    }
+    // _favoriteItem() {
+    //     return (
+    //         <TouchableOpacity
+    //             style={{padding: 6}}
+    //             underlayColor='transparent'
+    //             onPress={() => {
+    //             }}>
+    //             <FontAwesome
+    //                 name={'star-o'}
+    //                 size={26}
+    //                 style={{color: THEME_COLOR}}
+    //             />
+    //         </TouchableOpacity>
+    //     );
+    // }
 }
 
 const styles = StyleSheet.create({

@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-root-toast';
 
 export const BASE_URL = 'http://192.168.1.254:86';
@@ -175,6 +175,20 @@ export default class Common {
       }
     }
     return array;
+  }
+
+  /**
+   * 克隆数组
+   * @param from
+   * @returns {[]|Array}  新的数组
+   */
+  static cloneArray(from){
+    if (!from) return [];
+    let newArray = [];
+    for (let i = 0, l = from.length; i < l; i++) {
+      newArray[i] = from[i];
+    }
+    return newArray;
   }
 }
 

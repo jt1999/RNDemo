@@ -10,8 +10,6 @@ import GlobalStyles from '../res/style/GlobalStyles';
 import ViewUtil from '../util/ViewUtil';
 import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 
-const THEME_COLOR = '#678';
-
 class My extends Component {
 
   renderRightButton() {
@@ -27,7 +25,8 @@ class My extends Component {
   }
 
   onClick(menu) {
-    let RouteName, params = {};
+    const {theme} = this.props;
+    let RouteName, params = {theme};
     switch (menu) {
       case MORE_MENU.Tutorial:
         RouteName = 'WebViewPage';
@@ -44,8 +43,20 @@ class My extends Component {
         params.isRemoveKey = menu === MORE_MENU.Remove_Key;
         params.flag = menu !== MORE_MENU.Custom_Language ? FLAG_LANGUAGE.flag_key : FLAG_LANGUAGE.flag_language;
         break;
+      case MORE_MENU.Sort_Key:
+        RouteName = 'SortKey';
+        params.flag = FLAG_LANGUAGE.flag_key;
+        break;
+      case MORE_MENU.Sort_Language:
+        RouteName = 'SortKey';
+        params.flag = FLAG_LANGUAGE.flag_language;
+        break;
       case MORE_MENU.About_Author:
         RouteName = 'AboutAuthor';
+        break;
+      case MORE_MENU.Custom_Theme:
+        const {onShowCustomThemeView} = this.props;
+        onShowCustomThemeView(true);
         break;
       case MORE_MENU.Feedback:
         const url = 'mailto://crazycodeboy@gmail.com';
@@ -69,13 +80,14 @@ class My extends Component {
   }
 
   getItem(menu) {
-    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+    const {theme} = this.props;
+    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, theme.themeColor);
   }
 
   render() {
-    const {navigation} = this.props;
+    const {theme} = this.props;
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     };
     let navigationBar =
@@ -83,7 +95,7 @@ class My extends Component {
         title={'我的'}
         rightButton={this.renderRightButton()}
         statusBar={statusBar}
-        style={{backgroundColor: THEME_COLOR}}
+        style={theme.styles.navBar}
       />;
     return (
       <SafeAreaView style={GlobalStyles.root_container}>
@@ -99,7 +111,7 @@ class My extends Component {
                 size={40}
                 style={{
                   marginRight: 10,
-                  color: THEME_COLOR,
+                  color: theme.themeColor,
                 }}
               />
               <Text>GitHub Popular</Text>
@@ -110,7 +122,7 @@ class My extends Component {
               style={{
                 marginRight: 10,
                 alignSelf: 'center',
-                color: THEME_COLOR,
+                color: theme.themeColor,
               }}/>
           </TouchableOpacity>
           <View style={GlobalStyles.line}/>
@@ -151,6 +163,8 @@ class My extends Component {
       </SafeAreaView>
     );
   }
+
+
 }
 
 const styles = StyleSheet.create({
@@ -178,9 +192,12 @@ const styles = StyleSheet.create({
   },
 });
 
-
-const mapDispatchToProps = dispatch => ({
-  onThemeChange: theme => dispatch(actions.onThemeChange(theme)),
+const mapStateToProps = state => ({
+  theme: state.theme.theme,  //一级页面用此方法取theme　二级页面用参数传递
 });
 
-export default connect(null, mapDispatchToProps)(My);
+const mapDispatchToProps = dispatch => ({
+  onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(My);
