@@ -28,8 +28,7 @@ class Welcome extends Component {
             }
         }, 1000);
     }
-
-    componentWillMount() {
+    componentWillUnmount() {
         this.timer && clearInterval(this.timer);
     }
 
