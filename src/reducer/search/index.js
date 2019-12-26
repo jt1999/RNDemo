@@ -6,7 +6,7 @@ const defaultState = {
   isLoading: false,
   projectModels: [],//要显示的原始数据
   hideLoadingMore: true,//默认隐藏加载更多
-  showButtomButton: false,
+  showBottomButton: false,
 };
 
 export default function onAction(state = defaultState, action) {
@@ -16,7 +16,7 @@ export default function onAction(state = defaultState, action) {
         ...state,
         isLoading: true,
         hideLoadingMore: true,
-        showButtomButton: false,
+        showBottomButton: false,
         showText: '取消',
       };
     case Types.SEARCH_REFRESH_SUCCESS: //搜索成功
@@ -24,7 +24,7 @@ export default function onAction(state = defaultState, action) {
         ...state,
         isLoading: false,
         hideLoadingMore: false,
-        showButtomButton: action.showButtomButton,
+        showBottomButton: action.showBottomButton,
         items: action.items,
         projectModels: action.projectModels,
         pageIndex: action.pageIndex,

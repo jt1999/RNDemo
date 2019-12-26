@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity} from 'react-native';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import {connect} from 'react-redux';
@@ -13,6 +13,7 @@ import FavoriteUtil from '../util/FavoriteUtil';
 import EventBus from 'react-native-event-bus';
 import EventTypes from '../util/EventTypes';
 import {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //常量
 const URL = 'https://api.github.com/search/repositories?q=';
@@ -65,6 +66,28 @@ class Popular extends Component {
     ));
   }
 
+  renderRightButton() {
+    const {theme} = this.props;
+    return <TouchableOpacity
+      onPress={() => {
+        //新版本友盟SDK 时间统计方法由 track -> onEvent
+        // AnalyticsUtil.onEvent("SearchButtonClick");
+        NavigatorUtil.goPage({theme}, 'Search');
+      }}
+    >
+      <View style={{padding: 5, marginRight: 8}}>
+        <Ionicons
+          name={'ios-search'}
+          size={24}
+          style={{
+            marginRight: 8,
+            alignSelf: 'center',
+            color: 'white',
+          }}/>
+      </View>
+    </TouchableOpacity>;
+  }
+
   render() {
     const {keys, theme} = this.props;
     let statusBar = {
@@ -75,6 +98,7 @@ class Popular extends Component {
       title={'最热'}
       statusBar={statusBar}
       style={theme.styles.navBar}
+      rightButton={this.renderRightButton()}
     />;
     const TopTab = keys.length ? this._createDynamicTopTab() : null;
     return <View style={{flex: 1}}>
@@ -166,7 +190,7 @@ class PopularTab extends Component {
 
   renderItem(data) {
     const item = data.item;
-    const {theme}=this.props;
+    const {theme} = this.props;
     return <PopularItem
       projectModel={item}
       theme={theme}
@@ -184,7 +208,7 @@ class PopularTab extends Component {
 
 
   renderListFooter() {
-    const {theme} =this.props;
+    const {theme} = this.props;
     return this._store().hideLoadingMode ? null :
       <View style={styles.indicatorContainer}>
         <ActivityIndicator
@@ -204,7 +228,7 @@ class PopularTab extends Component {
     //     };
     // }
     let store = this._store();
-    const {theme}=this.props;
+    const {theme} = this.props;
     return (
       <View style={{flex: 1}}>
         <FlatList

@@ -118,11 +118,9 @@ function hasCancel(token, isRemove) {
  * @param inputKey
  * @returns {boolean}
  */
-function checkKeyIsExist(popularKeys, inputKey) {
-  for (let i = 0, len = popularKeys.length; i < len; i++) {
-    if (inputKey.toLowerCase() === popularKeys[i].name.toLowerCase()) {
-      return true;
-    }
+function checkKeyIsExist(keys, key) {
+  for (let i = 0, l = keys.length; i < l; i++) {
+    if (key.toLowerCase() === keys[i].name.toLowerCase()) return true;
   }
   return false;
 }
