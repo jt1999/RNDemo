@@ -217,7 +217,7 @@ class Search extends Component {
         }}
       >
         <View style={{justifyContent: 'center'}}>
-          <Text style={styles.title}>朕收下了</Text>
+          <Text style={styles.title}>保存此标签</Text>
         </View>
       </TouchableOpacity> : null;
 
